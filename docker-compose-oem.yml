@@ -8,7 +8,7 @@ services:
     image: nginx
     #restart: always
     restart: unless-stopped
-    env_file: env
+    #env_file: env
     volumes:
       # Vhost configuration
       #- ./config/caddy/Caddyfile:/etc/caddy/Caddyfiledocker-com
@@ -30,7 +30,7 @@ services:
 
   app:
     image: invoiceninja/invoiceninja:5
-    env_file: env
+    #env_file: env
     #restart: always
     restart: unless-stopped
     volumes:
@@ -57,7 +57,7 @@ services:
     #  - "3305:3306"
     #restart: always
     restart: unless-stopped
-    env_file: env
+    #env_file: env
     volumes:
       #- ./docker/mysql/data:/var/lib/mysql:rw,delegated
       - ${LOCVOL1}invoicing/demo/db:/var/lib/mysql:rw,delegated
