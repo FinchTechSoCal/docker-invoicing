@@ -3,21 +3,21 @@ version: '3.7'
 services:
   server:
     image: nginx
-    restart: always
+    restart: unless-stopped
     env_file: stack.env
     volumes:
       - ${IN5VOL}config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
       - ${IN5VOL}docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
-    ports:
-      - "8180:80"
+    #ports:
+      #- "8180:80"
       #- "443:443"
 
   app:
     image: invoiceninja/invoiceninja:5.6.5
     env_file: stack.env
-    restart: always
+    restart: unless-stopped
     volumes:
       - ${IN5VOL}docker/app/public:/var/www/app/public:rw,delegated
       - ${IN5VOL}docker/app/storage:/var/www/app/storage:rw,delegated
@@ -25,11 +25,14 @@ services:
       - db
 
   db:
-    image: lscr.io/linuxserver/mariadb:latest
+    #image: mysql:8
+    image: mariadb:10.4
+#    ports:
+#      - "3305:3306"
+    restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}docker/db:/config
-    restart: unless-stopped
+      - ${IN5VOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
 
 networks:
   default:
