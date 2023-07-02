@@ -6,14 +6,10 @@ services:
     restart: always
     env_file: stack.env
     volumes:
-      # Vhost configuration
-      #- ./config/caddy/Caddyfile:/etc/caddy/Caddyfiledocker-com
       - ${IN5VOL}config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
       - ${IN5VOL}docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
-    # Run webserver nginx on port 80
-    # Feel free to modify depending what port is already occupied
     ports:
       - "8180:80"
       #- "443:443"
@@ -30,10 +26,9 @@ services:
 
   db:
     image: lscr.io/linuxserver/mariadb:latest
-    #container_name: invoicing_test_db
     env_file: stack.env
     volumes:
-      - ${IN5VOL}db:/config
+      - ${IN5VOL}docker/db:/config
     restart: unless-stopped
 
 networks:
