@@ -7,8 +7,10 @@ services:
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
-      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:ro
+      #- ${IN5VOL}/${APPENVIRO}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
+      #- ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:ro
+      - ${IN5VOL}/${APPENVIRO}/app/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
+      - ${IN5VOL}/${APPENVIRO}/app/public:/var/www/app/public:ro
     depends_on:
       - app
     #ports:
@@ -21,8 +23,10 @@ services:
     env_file: stack.env
     restart: unless-stopped
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:rw,delegated
-      - ${IN5VOL}/${APPENVIRO}/docker/app/storage:/var/www/app/storage:rw,delegated
+      #- ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:rw,delegated
+      #- ${IN5VOL}/${APPENVIRO}/docker/app/storage:/var/www/app/storage:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/app/public:/var/www/app/public:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
       - db
 
@@ -34,8 +38,9 @@ services:
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
-      - ${IN5VOL}/${APPENVIRO}/db:/config
+      #- ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/db:/var/lib/mysql:rw,delegated
+      #- ${IN5VOL}/${APPENVIRO}/db:/config
     
 networks:
   default:
