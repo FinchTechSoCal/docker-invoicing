@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  server:
+    env_file: stack.env
+  app:
+    env_file: stack.env
+  db:
+    image: lscr.io/linuxserver/mariadb:latest
+    #container_name: invoicing_test_db
+    env_file: stack.env
+    volumes:
+      - ${LOCVOL1}invoice-ninja/test/db:/config
+    restart: unless-stopped
+
+networks:
+  default:
+    name: ${CONNET}
+    external: true
