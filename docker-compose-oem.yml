@@ -28,12 +28,13 @@ services:
 
   db:
     #image: mariadb:10.4
-    image: lscr.io/linuxserver/mariadb:latest
+    image: mariadb:latest
+    #image: lscr.io/linuxserver/mariadb:latest
     container_name: invoicing-${APPENVIRO}-db
     restart: unless-stopped
     env_file: stack.env
     volumes:
-    #  - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
       - ${IN5VOL}/${APPENVIRO}/db:/config
     
 networks:
