@@ -1,17 +1,28 @@
 # docker-invoicing
-Invoice ninja in docker
+Invoice Ninja v5 in docker
 
 ## Application Setup
-The env file contains the environment we want (prod, test, demo, etc). This is expected as APPENVIRO and we use it in the folder path.
+To not break whatever crazy stuff the designers did, we're going to use the original paths (mostly).
+We plan on deploying via portainer, we'll use stack.env as our environment file.
+Our env file contains the environment we want (prod, test, demo, etc). This is expected as APPENVIRO and we use it in the folder path.
 If APPENVIRO=test then installation & container names will have 'test' in them.
 
-cd into the app installation folder (IN5VOL) & create a folder matching APPENVIRO, then
+Let's make this easy by setting a bash variables to match 'IN5VOL' & 'APPENVIRO'
 ```bash
-mkdir -p db
-mkdir -p app/public
-mkdir -p app/storage
-chmod -R 777 app/*
+IN5VOL=/home/finchtech/appdata/invoice-ninja
+APPENVIRO=test
+git clone https://github.com/invoiceninja/dockerfiles.git $IN5VOL/$APPENVIRO
+chmod 755 $IN5VOL/$APPENVIRO/docker/app/public
+sudo chown -R 1500:1500 $IN5VOL/$APPENVIRO/docker/app
 ```
+
+Generate an `APP_KEY` for our stack.env file
+
+```bash
+docker run --rm -it invoiceninja/invoiceninja php artisan key:generate --show
+```
+
+
 
 ## From the original docs
 If `IN_USER_EMAIL` and `IN_PASSWORD` is not set the default user email and password is "admin@example.com" and "changeme!" respectively. You will use this for the initial login, thereafter, you can delete this two environment variables.
