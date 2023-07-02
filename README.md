@@ -22,7 +22,11 @@ Generate an `APP_KEY` for our stack.env file
 docker run --rm -it invoiceninja/invoiceninja php artisan key:generate --show
 ```
 
-
+## Updating Invoice Ninja
+Supposedly all we have to do is pull the latest image & restart the stack. We're using latest for nginx & mariaDB but pinned the version for InvoiceNinja, so update that as necessary.
+```bash
+docker pull invoiceninja/invoiceninja:5.6.5
+```
 
 ## From the original docs
 If `IN_USER_EMAIL` and `IN_PASSWORD` is not set the default user email and password is "admin@example.com" and "changeme!" respectively. You will use this for the initial login, thereafter, you can delete this two environment variables.
