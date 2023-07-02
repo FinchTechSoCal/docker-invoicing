@@ -23,7 +23,7 @@ services:
       - "in5.localhost:192.168.0.124 " #host and ip
 
   app:
-    image: invoiceninja/invoiceninja:5
+    image: invoiceninja/invoiceninja:latest
     env_file: stack.env
     restart: always
     volumes:
