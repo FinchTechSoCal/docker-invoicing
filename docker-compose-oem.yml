@@ -3,11 +3,12 @@ version: '3.7'
 services:
   server:
     image: nginx
+    container_name: invoicing-${APPENVIRO}-nginx
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
-      - ${IN5VOL}docker/app/public:/var/www/app/public:ro
+      - ${IN5VOL}/${APPENVIRO}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
+      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
     #ports:
@@ -16,23 +17,25 @@ services:
 
   app:
     image: invoiceninja/invoiceninja:5.6.5
+    container_name: invoicing-${APPENVIRO}-app
     env_file: stack.env
     restart: unless-stopped
     volumes:
-      - ${IN5VOL}docker/app/public:/var/www/app/public:rw,delegated
-      - ${IN5VOL}docker/app/storage:/var/www/app/storage:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
       - db
 
   db:
     #image: mysql:8
     image: mariadb:10.4
+    container_name: invoicing-${APPENVIRO}-db
 #    ports:
 #      - "3305:3306"
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
 
 networks:
   default:
