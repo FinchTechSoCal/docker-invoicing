@@ -27,16 +27,15 @@ services:
       - db
 
   db:
-    #image: mysql:8
-    image: mariadb:10.4
+    #image: mariadb:10.4
+    image: lscr.io/linuxserver/mariadb:latest
     container_name: invoicing-${APPENVIRO}-db
-#    ports:
-#      - "3305:3306"
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
-
+    #  - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
+      - ${IN5VOL}/${APPENVIRO}/db:/config
+    
 networks:
   default:
     name: ${CONNET}
