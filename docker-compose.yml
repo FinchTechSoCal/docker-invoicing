@@ -10,7 +10,7 @@ services:
       - ${IN5VOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
       - ${IN5VOL}/docker/app/public:/var/www/app/public:ro
     depends_on:
-      - invoiceninja-app
+      - app
     #ports:
       #- "8180:80"
       #- "443:443"
@@ -24,7 +24,7 @@ services:
       - ${IN5VOL}/docker/app/public:/var/www/app/public:rw,delegated
       - ${IN5VOL}/docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
-      - invoiceninja-db
+      - db
 
   db:
     image: mariadb:latest
