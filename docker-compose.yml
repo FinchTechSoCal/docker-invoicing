@@ -1,32 +1,38 @@
 version: '3.7'
+
 services:
   server:
-    image: lscr.io/linuxserver/nginx:1.24.0-r6-ls229
+    image: nginx
+    container_name: invoiceninja-nginx
+    restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}web:/config
-      - ${IN5VOL}in5-site.conf:/config/nginx/site-confs/in5-site.conf:ro
-      #- ${IN5VOL}docker/app/public:/var/www/app/public:ro
-      - ${IN5VOL}public:/config/www/app/public:rw,delegated
-    restart: unless-stopped
+      - ${IN5VOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
+      - ${IN5VOL}/docker/app/public:/var/www/app/public:ro
     depends_on:
-      - app
+      - invoiceninja-app
+    #ports:
+      #- "8180:80"
+      #- "443:443"
+
   app:
     image: invoiceninja/invoiceninja:5.6.5
+    container_name: invoiceninja-app
     env_file: stack.env
-    volumes:
-      - ${IN5VOL}public:/var/www/app/public:rw,delegated
-      - ${IN5VOL}storage:/var/www/app/storage:rw,delegated
     restart: unless-stopped
+    volumes:
+      - ${IN5VOL}/docker/app/public:/var/www/app/public:rw,delegated
+      - ${IN5VOL}/docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
-      - db
+      - invoiceninja-db
+
   db:
-    image: lscr.io/linuxserver/mariadb:10.11.4-r0-ls103
-    #container_name: invoicing_test_db
+    image: mariadb:latest
+    container_name: invoiceninja-db
+    restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}db:/config
-    restart: unless-stopped
+      - ${IN5VOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
 
 networks:
   default:
