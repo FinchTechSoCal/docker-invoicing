@@ -8,6 +8,9 @@ Our env file contains the environment we want (prod, test, demo, etc). This is e
 
 We also need to modify $INVOL/config/nginx/in-vhost.conf to make it match our container name 'invoiceninja-app' rather than just 'app'
 
+AND setup backups (see backup-script.sh).
+
+
 Let's make this easy
 ```bash
 INVOL=/home/finchtech/appdata/invoice-ninja
@@ -15,6 +18,7 @@ git clone https://github.com/invoiceninja/dockerfiles.git $INVOL
 chmod 755 $INVOL/docker/app/public
 sudo chown -R 1500:1500 $INVOL/docker/app
 /bin/sed -i "s/fastcgi_pass app:9000;/fastcgi_pass invoiceninja-app:9000;/" $INVOL/config/nginx/in-vhost.conf
+mkdir -p $INVOL/docker/app/db/backups
 ```
 
 Generate an `APP_KEY` for our stack.env file
