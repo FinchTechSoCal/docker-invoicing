@@ -1,6 +1,24 @@
 version: '3.7'
 
 services:
+  server:
+    image: nginx:latest
+    container_name: invoiceninja4-nginx
+    restart: unless-stopped
+    env_file: stack.env
+    volumes:
+    #  - ${INVOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
+    #  - ${INVOL}/docker/app/public:/var/www/app/public:ro
+      #- ${INVOL}/docker/app/public:/var/www/app/public:rw,delegated
+      #- ${INVOL}/docker/app/public:/var/app/public:rw,delegated
+      #- ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
+      #- ${INVOL}/docker/app/storage:/var/app/storage:rw,delegated
+    depends_on:
+      - app
+    ports:
+      - "8180:80"
+      - "9080:9000"
+      #- "8443:443"
   app:
     image: invoiceninja/invoiceninja:4.5.51
     container_name: invoiceninja4-app
@@ -12,7 +30,8 @@ services:
       #- ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
       - ${INVOL}/docker/app/storage:/var/app/storage:rw,delegated
     ports:
-      - "8180:80"
+      - "8181:80"
+      - "9081:9000"
       #- "8443:443"
     depends_on:
       - db
