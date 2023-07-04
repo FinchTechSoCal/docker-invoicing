@@ -18,7 +18,7 @@ git clone https://github.com/invoiceninja/dockerfiles.git $INVOL
 chmod 755 $INVOL/docker/app/public
 sudo chown -R 1500:1500 $INVOL/docker/app
 /bin/sed -i "s/fastcgi_pass app:9000;/fastcgi_pass invoiceninja-app:9000;/" $INVOL/config/nginx/in-vhost.conf
-mkdir -p $INVOL/docker/app/db/backups
+mkdir -p $INVOL/docker/db/backups
 ```
 
 Generate an `APP_KEY` for our stack.env file
