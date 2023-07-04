@@ -2,38 +2,37 @@ version: '3.7'
 
 services:
   server:
-    image: nginx
-    container_name: invoicing-${APPENVIRO}-nginx
+    image: nginx:latest
+    container_name: invoiceninja-nginx
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
-      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:ro
+      - ${IN5VOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
+      - ${IN5VOL}/docker/app/public:/var/www/app/public:ro
     depends_on:
       - app
-    ports:
-      - "8180:80"
-      #- "443:443"
+    #ports:
+      #- "8180:80"
+      #- "8443:443"
 
   app:
     image: invoiceninja/invoiceninja:5.6.5
-    container_name: invoicing-${APPENVIRO}-app
+    container_name: invoiceninja-app
     env_file: stack.env
     restart: unless-stopped
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/docker/app/public:/var/www/app/public:rw,delegated
-      - ${IN5VOL}/${APPENVIRO}/docker/app/storage:/var/www/app/storage:rw,delegated
+      - ${IN5VOL}/docker/app/public:/var/www/app/public:rw,delegated
+      - ${IN5VOL}/docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
       - db
 
   db:
-    #image: mariadb:10.4
     image: mariadb:latest
-    container_name: invoicing-${APPENVIRO}-db
+    container_name: invoiceninja-db
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/${APPENVIRO}/docker/mysql/data:/var/lib/mysql:rw,delegated
+      - ${IN5VOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
 
 networks:
   default:

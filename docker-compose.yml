@@ -26,22 +26,14 @@ services:
     depends_on:
       - db
 
+# Use LISO mariaDB
   db:
-    image: mariadb:latest
+    image: lscr.io/linuxserver/mariadb:latest
     container_name: invoiceninja-db
     restart: unless-stopped
     env_file: stack.env
     volumes:
-      - ${IN5VOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
-
-# Use LISO mariaDB
-#  db:
-#    image: lscr.io/linuxserver/mariadb:latest
-#    container_name: invoiceninja-db
-#    restart: unless-stopped
-#    env_file: stack.env
-#    volumes:
-#      - ${IN5VOL}/docker/mysql:/config
+      - ${IN5VOL}/docker/db:/config
 
 networks:
   default:
