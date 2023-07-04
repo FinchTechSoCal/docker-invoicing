@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  app:
+    image: invoiceninja/invoiceninja:4.5.51
+    container_name: invoiceninja4-app
+    env_file: stack.env
+    restart: unless-stopped
+    volumes:
+      #- ${INVOL}/docker/app/public:/var/www/app/public:rw,delegated
+      - ${INVOL}/docker/app/public:/var/app/public:rw,delegated
+      #- ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
+      - ${INVOL}/docker/app/storage:/var/app/storage:rw,delegated
+    ports:
+      - "8180:80"
+      #- "8443:443"
+    depends_on:
+      - db
+
+# Add LISO mariaDB
+  db:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: invoiceninja4-db
+    restart: unless-stopped
+    env_file: stack.env
+    volumes:
+      - ${INVOL}/docker/db:/config
+
+networks:
+  default:
+    name: ${CONNET}
+    external: true
