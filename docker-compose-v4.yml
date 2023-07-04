@@ -17,7 +17,7 @@ services:
       - "9080:9000"
       #- "8443:443"
   app:
-    image: invoiceninja/invoiceninja:4.5.51
+    image: invoiceninja/invoiceninja:alpine-4.5.32
     container_name: invoiceninja4-app
     env_file: stack.env
     restart: unless-stopped
