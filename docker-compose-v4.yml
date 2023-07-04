@@ -7,12 +7,9 @@ services:
     restart: unless-stopped
     env_file: stack.env
     volumes:
-    #  - ${INVOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
-    #  - ${INVOL}/docker/app/public:/var/www/app/public:ro
-      #- ${INVOL}/docker/app/public:/var/www/app/public:rw,delegated
-      #- ${INVOL}/docker/app/public:/var/app/public:rw,delegated
-      #- ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
-      #- ${INVOL}/docker/app/storage:/var/app/storage:rw,delegated
+      - ${INVOL}/config/nginx/in-vhost.conf:/config/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
+      - ${INVOL}/docker/app/public:/var/app/public:rw,delegated
+      - ${INVOL}/docker/app/storage:/var/app/storage:rw,delegated
     depends_on:
       - app
     ports:
