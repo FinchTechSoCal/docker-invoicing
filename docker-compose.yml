@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   server:
-    image: nginx
+    image: nginx:latest
     container_name: invoiceninja-nginx
     restart: unless-stopped
     env_file: stack.env

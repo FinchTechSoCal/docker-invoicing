@@ -2,18 +2,19 @@
 Invoice Ninja v5 in docker
 
 ## Application Setup
-To not break whatever crazy stuff the designers did, we're going to use the original paths (mostly).
-We plan on deploying via portainer, we'll use stack.env as our environment file.
-Our env file contains the environment we want (prod, test, demo, etc). This is expected as APPENVIRO and we use it in the folder path.
-If APPENVIRO=test then installation & container names will have 'test' in them.
+To not break whatever crazy stuff the designers did, we're going to use the original paths (mostly). We plan on deploying via portainer, we'll use stack.env as our environment file.
 
-Let's make this easy by setting a bash variables to match 'IN5VOL' & 'APPENVIRO'
+Our env file contains the environment we want (prod, test, demo, etc). This is expected as APPENVIRO and we use it in the folder path.
+
+We also need to modify $IN5VOL/config/nginx/in-vhost.conf to make it match our container name 'invoiceninja-app' rather than just 'app'
+
+Let's make this easy
 ```bash
 IN5VOL=/home/finchtech/appdata/invoice-ninja
-APPENVIRO=test
-git clone https://github.com/invoiceninja/dockerfiles.git $IN5VOL/$APPENVIRO
-chmod 755 $IN5VOL/$APPENVIRO/docker/app/public
-sudo chown -R 1500:1500 $IN5VOL/$APPENVIRO/docker/app
+git clone https://github.com/invoiceninja/dockerfiles.git $IN5VOL
+chmod 755 $IN5VOL/docker/app/public
+sudo chown -R 1500:1500 $IN5VOL/docker/app
+/bin/sed -i "s/fastcgi_pass app:9000;/fastcgi_pass invoiceninja-app:9000;/" $IN5VOL/config/nginx/in-vhost.conf
 ```
 
 Generate an `APP_KEY` for our stack.env file
