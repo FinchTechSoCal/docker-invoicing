@@ -24,12 +24,21 @@ services:
       - ${INVOL}/docker/app/public:/var/www/app/public:rw,delegated
       - ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
     depends_on:
+      - dbmaria
       - db
 
-# Use LISO mariaDB
+  dbmaria:
+    image: mariadb:latest
+    container_name: invoiceninja-db
+    restart: unless-stopped
+    env_file: stack.env
+    volumes:
+      - ${INVOL}/docker/mysql/data:/var/lib/mysql:rw,delegated
+
+# Add LISO mariaDB
   db:
     image: lscr.io/linuxserver/mariadb:latest
-    container_name: invoiceninja-db
+    container_name: invoiceninja-db2
     restart: unless-stopped
     env_file: stack.env
     volumes:
