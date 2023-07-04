@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  server:
+    image: nginx:latest
+    container_name: invoiceninja-test-nginx
+    restart: unless-stopped
+    env_file: stack.env
+    volumes:
+      - ${INVOL}/config/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro #must modify this file, replace app with invoiceninja-app
+      - ${INVOL}/docker/app/public:/var/www/app/public:ro
+    depends_on:
+      - app
+    #ports:
+      #- "8180:80"
+      #- "8443:443"
+
+  app:
+    image: invoiceninja/invoiceninja:5.6.5
+    container_name: invoiceninja-test-app
+    env_file: stack.env
+    restart: unless-stopped
+    volumes:
+      - ${INVOL}/docker/app/public:/var/www/app/public:rw,delegated
+      - ${INVOL}/docker/app/storage:/var/www/app/storage:rw,delegated
+    depends_on:
+      - db
+
+# Use LISO mariaDB
+  db:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: invoiceninja-test-db
+    restart: unless-stopped
+    env_file: stack.env
+    volumes:
+      - ${INVOL}/docker/db:/config
+
+networks:
+  default:
+    name: ${CONNET}
+    external: true
