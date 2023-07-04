@@ -6,21 +6,21 @@ To not break whatever crazy stuff the designers did, we're going to use the orig
 
 Our env file contains the environment we want (prod, test, demo, etc). This is expected as APPENVIRO and we use it in the folder path.
 
-We also need to modify $IN5VOL/config/nginx/in-vhost.conf to make it match our container name 'invoiceninja-app' rather than just 'app'
+We also need to modify $INVOL/config/nginx/in-vhost.conf to make it match our container name 'invoiceninja-app' rather than just 'app'
 
 Let's make this easy
 ```bash
-IN5VOL=/home/finchtech/appdata/invoice-ninja
-git clone https://github.com/invoiceninja/dockerfiles.git $IN5VOL
-chmod 755 $IN5VOL/docker/app/public
-sudo chown -R 1500:1500 $IN5VOL/docker/app
-/bin/sed -i "s/fastcgi_pass app:9000;/fastcgi_pass invoiceninja-app:9000;/" $IN5VOL/config/nginx/in-vhost.conf
+INVOL=/home/finchtech/appdata/invoice-ninja
+git clone https://github.com/invoiceninja/dockerfiles.git $INVOL
+chmod 755 $INVOL/docker/app/public
+sudo chown -R 1500:1500 $INVOL/docker/app
+/bin/sed -i "s/fastcgi_pass app:9000;/fastcgi_pass invoiceninja-app:9000;/" $INVOL/config/nginx/in-vhost.conf
 ```
 
 Generate an `APP_KEY` for our stack.env file
 
 ```bash
-docker run --rm -it invoiceninja/invoiceninja php artisan key:generate --show
+docker run --rm -it invoiceninja/invoiceninja:5.6.5 php artisan key:generate --show
 ```
 
 ## Updating Invoice Ninja
@@ -28,6 +28,10 @@ Supposedly all we have to do is pull the latest image & restart the stack. We're
 ```bash
 docker pull invoiceninja/invoiceninja:5.6.5
 ```
+
+
+
+
 
 ## From the original docs
 If `IN_USER_EMAIL` and `IN_PASSWORD` is not set the default user email and password is "admin@example.com" and "changeme!" respectively. You will use this for the initial login, thereafter, you can delete this two environment variables.
